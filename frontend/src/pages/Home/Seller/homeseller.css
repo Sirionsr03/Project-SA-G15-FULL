@@ -1,0 +1,76 @@
+.homeseller{
+  width: auto;
+  height: auto;
+}
+
+
+.box-pageseller img{
+  width: 1000px;
+  height: 400px;
+  border-radius: 25px;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+.box-productseller{
+  display: flex;
+  justify-content: center;
+  background-color: #EBD96B;
+  width: 1470px;
+  height: 100px;
+  margin-top: 20px;
+}
+
+.box-productseller img{
+  margin-left: 90px;
+  margin-top: 15px;
+  width: 70px;
+  height: 70px;
+}
+
+.Naw-arrivalsseller{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 26px;
+  margin-left: 20px;
+}
+
+
+/*ปรับขนาด 3*3 ไม่ต้องยุ่งดีกว่า*/
+.productsseller {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr ;
+  place-items: center;
+}
+
+
+/*ปรับขนาดรูปภาพ*/
+.productseller img {
+  width: 250px;
+  height: 350px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+}
+
+/*ปรับให้ตัวอักษรอยู่รงกลาง ไม่ยุ่งดีเเล้ว*/
+.productseller .descriptionseller {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 20px;
+}
+
+.productseller .descriptionseller .name-proseller{
+  font-size: 18px;
+  color: #003459;
+}
+
+.productseller .descriptionseller .money-colorseller{
+  margin-bottom: 40px;
+}
+
+/*ส่วนเสริม*/
+.productseller:hover {
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
