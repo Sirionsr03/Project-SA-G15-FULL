@@ -12,7 +12,6 @@ function LoginPage(){
 
   const [messageApi, contextHolder] = message.useMessage();
 
-
   const onFinish = async (values: LoginInterface) => {  
 
     let res = await Login(values);
@@ -32,13 +31,11 @@ function LoginPage(){
 
       localStorage.setItem("id", res.data.id); // user ID
 
-      localStorage.setItem("userEmail", res.data.email); // เก็บ email ใน localStorage
-
       setTimeout(() => { 
 
         location.href = "/";
 
-      }, 2000);//เพื่อหน่วงเวลา 2 วินาทีก่อนจะเปลี่ยนเส้นทางไปที่หน้า /HomeLogin
+      }, 1000);//เพื่อหน่วงเวลา 2 วินาทีก่อนจะเปลี่ยนเส้นทางไปที่หน้า /HomeLogin
 
 
     } else {
@@ -47,9 +44,6 @@ function LoginPage(){
 
     }
   };
-
-  localStorage.getItem("userEmail");
-
 
   return (<>
 

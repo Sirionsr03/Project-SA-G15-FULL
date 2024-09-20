@@ -5,23 +5,27 @@
   
 .back-arrow {
   position: absolute;
-  margin-top: -19vh;
-  margin-left: 1vh;
+  margin-top: -15vh;
+  margin-left: 55vh;
   cursor: pointer;
 }
+
+.profile{
+  margin-top: -10vh;
+}
   
-.images-logo {
+.images-logo-profile {
+  margin-top: -1vh;
   margin-left: -2vh;
 }
 
 .profilepic{
-  margin-bottom: 60vh;
-  margin-left: -13vh;
+  margin-left: -45vh;
 }
   
 .groupinfo{
-  margin-left: 25vh;
-  margin-top: -85vh;
+  margin-left: 35vh;
+  margin-top: -35vh;
 }
 
 .edit-imf-button{

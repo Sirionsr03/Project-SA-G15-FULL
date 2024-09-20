@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import './ProfileEdit.css';
 import logo from '../../../../assets/LogoOrange.png';
-import {Button,Form,Input,message,Divider, GetProp, Upload, UploadFile, UploadProps,} from "antd";
+import { Button, Form, Input, message, Divider, Upload } from "antd";
 import { MemberInterface } from "../../../../interfaces/Member";
-import { GetMemberById, UpdateMemberById } from "../../../../services/http/index";
-import { useNavigate, Link} from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import { GetMemberById, UpdateMemberById } from "../../../../services/https/index";
+import { useNavigate, Link } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
-
+import type { GetProp, UploadFile, UploadProps } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 function ProfileEdit() {
@@ -48,29 +48,41 @@ function ProfileEdit() {
   const onFinish = async (values: MemberInterface) => {
     if (uid !== null) {
       values.ID = user?.ID;
-      values.ProfilePic = fileList[0].thumbUrl;
-      const res = await UpdateMemberById(uid, values);  // ตรวจสอบ uid ก่อนที่จะส่ง
-      if (res) {
-        messageApi.open({
-          type: "success",
-          content: res.message,
-        });
-        setTimeout(() => {
-          navigate("/Profile");
-        }, 2000);
-      } else {
-        messageApi.open({
-          type: "error",
-          content: res.message,
-        });
-      }
+       // ใช้ originFileObj จาก fileList ที่ได้จากการอัปโหลด
+      const file = fileList[0]?.originFileObj;
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = async () => {
+          const base64data = reader.result as string;
+          values.ProfilePic = base64data; // ใช้ base64 สำหรับเก็บรูปที่ครอบแล้ว
+
+        const res = await UpdateMemberById(uid, values);  // ตรวจสอบ uid ก่อนที่จะส่ง
+        if (res) {
+          messageApi.open({
+            type: "success",
+            content: res.message,
+          });
+          setTimeout(() => {
+            navigate("/Profile");
+          }, 2000);
+        } else {
+          messageApi.open({
+            type: "error",
+            content: res.message,
+          });
+        }
+      };
     } else {
-      messageApi.open({
-        type: "error",
-        content: "ไม่พบ User ID",
-      });
+      values.ProfilePic = fileList[0].thumbUrl; // ใช้ thumbUrl ถ้าไม่มีไฟล์
     }
-  };
+  }else {
+    messageApi.open({
+      type: "error",
+      content: "ไม่พบ User ID",
+    });
+  }
+};
 
   useEffect(() => {
     // ย้าย GetMemberid เข้าใน useEffect
@@ -105,7 +117,7 @@ function ProfileEdit() {
           <Divider />
           
           <Form.Item label="รูปประจำตัว" name="Profile" valuePropName="fileList">
-            <ImgCrop rotationSlider>
+            <ImgCrop aspect={1} rotationSlider>
               <Upload
                 fileList={fileList}
                 onChange={onChange}

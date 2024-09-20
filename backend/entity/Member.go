@@ -15,6 +15,8 @@ type Member struct {
 	Address    string
 	ProfilePic string `gorm:"type:longtext"`
 
+	RoomChats []RoomChat `gorm:"foreignKey:MemberID"` // ความสัมพันธ์ one-to-many กับ RoomChat
+
 
 	// Seller Seller `gorm:"foreignKey:MemberID"`
 

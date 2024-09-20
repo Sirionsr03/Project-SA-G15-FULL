@@ -23,12 +23,14 @@ func main() {
 
 	router := r.Group("/")
 	{
+		//Member
 		router.GET("/member/:id", Member.GetMember)
 		router.GET("/member", Member.ListMembers)
 		router.POST("/member", Member.CreateMember)
 		router.PATCH("/member/:id", Member.UpdateMember)
 		router.DELETE("/member/:id", Member.DeleteMember)
 
+		//seller
 		router.GET("/seller/:id", controller.GetSeller)
 		router.POST("/seller", controller.CreateSeller)
 		router.PATCH("/seller/:id", controller.UpdateSeller)
@@ -36,17 +38,16 @@ func main() {
 		router.GET("/seller/member/:member_id", controller.GetSellerByMemberId)
 		router.GET("/sellers/:seller_id/member/:member_id", controller.GetSellerIdByMemberID)
 		
-
+		//Order
 		router.POST("/orders", controller.CreateOrder)
         router.GET("/orders/:id", controller.GetOrder)
-
 		router.PATCH("/orders/:id", controller.UpdateOrder)
         router.DELETE("/orders/:id", controller.DeleteOrder)
 		router.GET("/orders/member/:memberId", controller.GetOrdersByMemberID)
 		router.GET("/orders/member/:memberId/product/:productId", controller.GetOrdersByProductIDAndMemberID)
 		router.GET("/orders/seller/:sellerId/product/:productId", controller.GetOrdersByProductIDAndSellerID)
 
-
+		//Products
 		router.GET("/products/:id", controller.GetProductsBYID)
 		router.GET("/products", controller.GetProducts)
 		router.POST("/products", controller.CreateProducts)
@@ -55,6 +56,7 @@ func main() {
 		router.GET("/products_by_member/:member_id", controller.GetProductsByMemberID)
 		router.GET("/products/seller/:seller_id", controller.GetProductsBySellerID)
 
+		//Product_Order
 		router.POST("/products_orders", controller.CreateProductsOrder)
 		router.GET("/products_orders", controller.ListProductsOrders)
         router.DELETE("/products_orders/:id", controller.DeleteProductsOrder)
@@ -66,6 +68,17 @@ func main() {
 		router.GET("/category", controller.GetCategory)
 		router.GET("/condition", controller.GetCondition)
 		// router.GET("/major", controller.GetMajor)
+
+		//RoomChat
+		router.GET("/roomchat/:member_id/:seller_id", controller.GetRoomChatByMemberAndSellerID)
+		router.POST("/roomchat/member/:memberID/seller/:sellerID", controller.CreateRoomChat)
+		router.GET("/roomchat/messages/:room_id", controller.GetMessages)
+		router.GET("/roomchat/seller/:id",controller.RoomChatBySellerID)
+		router.GET("/roomchat/member/:id",controller.RoomChatByMemberID)
+
+		//Message
+		router.POST("/message", controller.CreateMessage)
+		router.DELETE("/messages/:id",controller.DeleteMessage)
 
 	}
 

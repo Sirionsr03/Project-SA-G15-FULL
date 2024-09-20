@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import '../../../pages/authentication/Member/Profile.css';
+import React, { useState, useRef, useEffect } from 'react';
+import '../../../page/authentication/Member/Profile.css';
+import { FaEdit } from 'react-icons/fa';
 import { ArrowBendUpLeft } from 'phosphor-react';
 import logo from '../../../assets/LogoOrange.png';
-import { Button, Form,  message, Col, Flex, Card, Row} from "antd";
-import { Link, useNavigate} from "react-router-dom";
+import { Button, Form, message, Col, Flex, Card, Row, Avatar} from "antd";
+import { Link, Routes, useNavigate, Route } from "react-router-dom";
 import { MemberInterface } from '../../../interfaces/Member';
-import { GetMemberById } from '../../../services/http';
+import {GetMemberById} from '../../../services/https'
+import backarrow from "../../../assets/back-arrow.png";
+import { UserOutlined } from '@ant-design/icons';
 
 
 function Profile() {
@@ -66,19 +69,26 @@ function Profile() {
         <Row align={"middle"} justify={"center"} style={{ height: "400px" }}>
 
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <img alt="logo" style={{ width: "15%" }} src={logo} className="images-logo"/>
+            <img alt="logo" style={{ width: "15%" }} src={logo} className="images-logo-profile"/>
+          </Col>
+
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            <center><h1 className='profile'>PROFILE</h1></center>
           </Col>
 
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
             <div className="back-arrow" onClick={() => navigate("/HomeLogin")}>
-              <ArrowBendUpLeft size={32} />
+              <img src={backarrow} alt="backarrow" 
+                  style={{width: "40px",cursor: "pointer",marginLeft: "130px",}}/>
             </div>
           </Col>
 
           <Form name="basic" layout="vertical">
 
-          <div className="profilepic">
-            <img src={users?.ProfilePic} alt="No"/>
+          <div className='profilepic'>
+            <Col xs={24} style={{ textAlign: 'center', marginBottom: 20}}>
+              <Avatar size={250} src={users?.ProfilePic || undefined} icon={!users?.ProfilePic && <UserOutlined />} />
+            </Col>
           </div>
 
           <div className="groupinfo">
@@ -88,6 +98,8 @@ function Profile() {
                 <label className="username">Username : {users?.Username}</label>
               </Form.Item>
             </Col> 
+
+            
 
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Form.Item>

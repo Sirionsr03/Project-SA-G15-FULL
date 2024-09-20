@@ -6,13 +6,6 @@
     position: relative;
 }
   
-.back-arrow {
-    position: absolute;
-    top: 30px;
-    left: 520px;
-    cursor: pointer;
-}
-  
 .profileedit-box {
     background-color: #e2dfdf;
     padding: 30px;

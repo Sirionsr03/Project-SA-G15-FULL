@@ -38,6 +38,8 @@ func SetupDatabase() {
 		&entity.Condition{},
 		&entity.Order{},
 		&entity.Products_order{},
+		&entity.RoomChat{},
+		&entity.Message{},
 
 	)
 
