@@ -1,7 +1,7 @@
 import { Avatar, Button, message } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
-import { MessageInterface } from "../interfaces/IMessage";
-import { CreateMessage, GetMemberBySeller, GetMessage, GetRoomChatByMemberAndSellerID, RoomChatByMemberID } from "../services/https";
+import { MessageInterface } from "../../interfaces/Message";
+import { CreateMessage,  GetMemberBySeller,  GetMessage, GetRoomChatByMemberAndSellerID, RoomChatByMemberID } from "../../services/http/index";
 import './test.css';
 
 

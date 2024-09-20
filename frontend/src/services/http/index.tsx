@@ -303,6 +303,37 @@ async function GetSellerIdByMemberId(seller_id: number, member_id: number) {
 // }
 
 
+async function GetMemberBySeller(seller_id: number | undefined) {
+  if (seller_id === undefined) {
+    console.error("Seller ID is undefined");
+    return false;
+  }
+
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}/memberbyseller/${seller_id}`, requestOptions);
+
+    // ตรวจสอบว่าการตอบสนองถูกต้องหรือไม่
+    if (!response.ok) {
+      console.error("Error fetching member by seller:", response.statusText);
+      return false;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return false;
+  }
+}
+
+
 
 
 
@@ -821,6 +852,8 @@ export {
   UpdateMemberById,
   GetMemberByEmail,
   GetOrdersByMemberId,
+  GetMemberBySeller,
+  
 
   // ApplySeller,
 
