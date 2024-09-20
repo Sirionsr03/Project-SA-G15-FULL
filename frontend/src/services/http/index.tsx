@@ -3,6 +3,7 @@ import { LoginInterface } from "../../interfaces/Login";
 import { MemberInterface } from "../../interfaces/Member";
 import { ProductsInterface } from "../../interfaces/Products";
 import { Products_Orders } from "../../interfaces/Products_orders";
+import { RoomChatInterface } from "../../interfaces/RoomChat";
 import { SellerInterface } from "../../interfaces/Seller";
 
 import axios from "axios";
@@ -25,7 +26,7 @@ const requestOptions = {
 
 };
 
-//Member
+//Member ***************************************************************************
 
 async function Login(data: LoginInterface) {
 
@@ -121,7 +122,12 @@ async function GetMemberByEmail(email: string) {
 }
 
 
-// Order Management
+
+
+
+
+
+// Order Management*************************************************************************************
 
 // List all orders
 async function GetOrders() {
@@ -166,10 +172,17 @@ async function DeleteOrder(id: number | undefined) {
 }
 
 
+//******************************************************************************************** */
 
 
-//Seller
 
+
+
+
+
+
+
+//Seller ****************************************************************************************
 
 // async function GetSeller() {
 //   const seller = localStorage.getItem('seller_id');
@@ -201,9 +214,6 @@ async function GetSeller(id: number) {
     .catch((e) => e.response);
 
 }
-
-
-
 
 
 async function UpdateSellerById(id: number, data: SellerInterface) {
@@ -251,6 +261,7 @@ async function CreateSeller(data: SellerInterface) {
 //     .catch((e) => e.response);
 // }
 
+
 // ทดสอบเฉยๆ ลบได้ แก้ไขได้
 async function GetSellerByMemberId(member_id: number) {
   try {
@@ -264,7 +275,6 @@ async function GetSellerByMemberId(member_id: number) {
     return { error: "An error occurred while fetching seller information." };
   }
 }
-
 
 
 async function GetSellerIdByMemberId(seller_id: number, member_id: number) {
@@ -298,7 +308,8 @@ async function GetSellerIdByMemberId(seller_id: number, member_id: number) {
 
 
 
-//Products
+
+//Products  ********************************************************************
   async function GetProducts() {
     const requestOptions = {
       method: "GET",
@@ -392,10 +403,17 @@ async function GetSellerIdByMemberId(seller_id: number, member_id: number) {
   
     return res;
   }
+//***************************************************************************************** */
 
 
 
-  // Products Order Management
+
+
+
+
+
+
+  // Products Order Management     *************************************************************************
 
 // List all products-orders
 async function GetProductsOrders() {
@@ -508,6 +526,208 @@ async function GetOrdersByProductIDAndSellerID(sellerId: number, productId: numb
     return false;
   }
 }
+
+
+//**************************************************************************************** */
+
+
+
+
+
+
+
+
+
+
+//RoomChat********************************************************************************
+
+async function CreateRoomChat(data: RoomChatInterface) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/roomchat`, requestOptions)
+    .then((res) => {
+      if (res.status == 201) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
+async function GetRoomChat() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/roomchat`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}  
+
+
+
+
+async function RoomChatBySellerID(sellerID: number): Promise<any> {
+  const requestOptions = {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+  };
+
+  const response = await fetch(`${apiUrl}/roomchat/seller/${sellerID}`, requestOptions);
+
+  if (response.ok) {
+      return await response.json();
+  } else {
+      console.error(`Error: ${response.status} - ${response.statusText}`);
+      return false;
+  }
+}
+
+  async function RoomChatByMemberID(memberID: number): Promise<any> {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
+    const response = await fetch(`${apiUrl}/roomchat/member/${memberID}`, requestOptions);
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error(`Error: ${response.status} - ${response.statusText}`);
+        return false;
+    }
+  }
+
+
+  async function GetRoomChatByMemberAndSellerID(memberID: number, sellerID: number): Promise<any> {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
+    // ปรับ URL ให้ถูกต้อง
+    const response = await fetch(`${apiUrl}/roomchat/${memberID}/${sellerID}`, requestOptions);
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error(`Error: ${response.status} - ${response.statusText}`);
+        return false;
+    }
+}
+
+
+
+
+//Message
+async function CreateMessage(messageData: MessageInterface) {
+  try {
+    // แปลงคีย์ของ messageData
+    const formattedData = {
+      room_chat_id: messageData.room_chat_id,
+      content: messageData.content,
+      sender_id: messageData.sender_id,
+    };
+
+    const response = await fetch(`${apiUrl}/message`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error(`Error: ${response.statusText}`);
+      return false;
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Error: ${error.message}`);
+    } else {
+      console.error("An unknown error occurred");
+    }
+    return false;
+  }
+}
+
+
+async function GetMessage(id:number | undefined) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/roomchat/messages/${id}`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}  
+
+
+async function GetMemberBySeller(seller_id: number | undefined) {
+  if (seller_id === undefined) {
+    console.error("Seller ID is undefined");
+    return false;
+  }
+
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}/memberbyseller/${seller_id}`, requestOptions);
+
+    // ตรวจสอบว่าการตอบสนองถูกต้องหรือไม่
+    if (!response.ok) {
+      console.error("Error fetching member by seller:", response.statusText);
+      return false;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return false;
+  }
+}
+
+
+
 
 //Select
   async function GetYear() {
@@ -639,7 +859,16 @@ export {
   UpdateProductsOrder,
   DeleteProductsOrder,
 
+  //RoomChat
+  GetRoomChatByMemberAndSellerID,
+  RoomChatByMemberID,
+  RoomChatBySellerID,
+  CreateRoomChat,
+  GetRoomChat,
 
+  //Message
+  CreateMessage,
+  GetMessage,
 
   //Select ขอแต่ละหน้า
   GetYear,
