@@ -727,7 +727,7 @@ async function GetMessage(id:number | undefined) {
 }  
 
 
-async function GetMemberBySeller(seller_id: number | undefined) {
+async function GetChatMemberBySeller(seller_id: number | undefined) {
   if (seller_id === undefined) {
     console.error("Seller ID is undefined");
     return false;
@@ -761,85 +761,83 @@ async function GetMemberBySeller(seller_id: number | undefined) {
 
 
 //Select
-  async function GetYear() {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  
-    let res = await fetch(`${apiUrl}/years`, requestOptions)
-      .then((res) => {
-        if (res.status == 200) {
-          return res.json();
-        } else {
-          return false;
-        }
-      });
-  
-    return res;
-  }
+async function GetYear() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
-  async function GetInstituteOf() {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  
-    let res = await fetch(`${apiUrl}/instituteof`, requestOptions)
-      .then((res) => {
-        if (res.status == 200) {
-          return res.json();
-        } else {
-          return false;
-        }
-      });
-  
-    return res;
-  }
+  let res = await fetch(`${apiUrl}/years`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
 
-  async function GetCategory() {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  
-    let res = await fetch(`${apiUrl}/category`, requestOptions)
-      .then((res) => {
-        if (res.status == 200) {
-          return res.json();
-        } else {
-          return false;
-        }
-      });
-  
-    return res;
-  }
+  return res;
+}
 
-  async function GetCondition() {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  
-    let res = await fetch(`${apiUrl}/condition`, requestOptions)
-      .then((res) => {
-        if (res.status == 200) {
-          return res.json();
-        } else {
-          return false;
-        }
-      });
-  
-    return res;
-  }
+async function GetInstituteOf() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/instituteof`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+async function GetCategory() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/category`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+async function GetCondition() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/condition`, requestOptions)
+    .then((res) => {
+      if (res.status == 200) {
+        return res.json();
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
 
 
 export {
@@ -852,7 +850,7 @@ export {
   UpdateMemberById,
   GetMemberByEmail,
   GetOrdersByMemberId,
-  GetMemberBySeller,
+  GetChatMemberBySeller,
   
 
   // ApplySeller,

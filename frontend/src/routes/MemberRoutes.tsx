@@ -16,6 +16,7 @@ const HomeSeller = Loadable(lazy(() => import("../pages/Home/Seller/homeseller")
 const CreateProducts = Loadable(lazy(() => import("../pages/Products/CreateProducts/CreateProducts")));
 const ApplyToSeller = Loadable(lazy(() => import("../pages/Products/ApplyToSeller/ApplyToSeller")));
 const ProfileEdit = Loadable(lazy(() => import("../../src/pages/authentication/Member/edit/ProfileEdit")));
+const ChatBuyer = Loadable(lazy(() => import("../../src/pages/Chat/ChatBuyer")));
 
 
 const MemberRoutes = (isLoggedIn: boolean): RouteObject[] => {
@@ -56,9 +57,22 @@ const MemberRoutes = (isLoggedIn: boolean): RouteObject[] => {
       element: <Profile />,
     },
     {
+      path: "/ChatBuyer",
+      element: <ChatBuyer />,
+    },
+
+
+
+
+
+
+    {
       path: "/Profile/ProfileEdit/:id",
       element: <ProfileEdit />,
     },
+
+
+
     {
       path: "*",
       element: <HomeMember />,

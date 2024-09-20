@@ -51,7 +51,7 @@ function LoginPage(){
 
     <Flex justify="center" align="center" className="login">
       
-      <Card className="card-login" style={{ width: 600,}}>
+      <Card className="card-login" style={{ width: 600,}} >
 
         <Row align={"middle"} justify={"center"} style={{ height: "400px" }}>
 

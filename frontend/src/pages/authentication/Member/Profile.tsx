@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import '../../../page/authentication/Member/Profile.css';
+import '../../authentication/Member/Profile.css';
 import { FaEdit } from 'react-icons/fa';
 import { ArrowBendUpLeft } from 'phosphor-react';
 import logo from '../../../assets/LogoOrange.png';
 import { Button, Form, message, Col, Flex, Card, Row, Avatar} from "antd";
 import { Link, Routes, useNavigate, Route } from "react-router-dom";
 import { MemberInterface } from '../../../interfaces/Member';
-import {GetMemberById} from '../../../services/https'
+import {GetMemberById} from '../../../services/http'
 import backarrow from "../../../assets/back-arrow.png";
 import { UserOutlined } from '@ant-design/icons';
 

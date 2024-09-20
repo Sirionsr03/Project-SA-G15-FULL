@@ -1,8 +1,9 @@
 import { Avatar, Button, message } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import { MessageInterface } from "../../interfaces/Message";
-import { CreateMessage,  GetMemberBySeller,  GetMessage, GetRoomChatByMemberAndSellerID, RoomChatByMemberID } from "../../services/http/index";
+import { CreateMessage,  GetChatMemberBySeller,  GetMemberById,  GetMessage, GetRoomChatByMemberAndSellerID, RoomChatByMemberID } from "../../services/http/index";
 import './test.css';
+import { MemberInterface } from "../../interfaces/Member";
 
 
 
@@ -22,15 +23,49 @@ interface MemberBySeller {
 const Test: React.FC = () => {
   const [chatMembers, setChatMembers] = useState<MemberBySeller[]>([]);
   const [messages, setMessages] = useState<MessageInterface[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [setLoading] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
   const [inputMessage, setInputMessage] = useState("");
   const [roomChatID, setRoomChatID] = useState<number | null>(null);
   const [selectedSellerID, setSelectedSellerID] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    //ส่วนที่เพิ่มมาใหม่ ****start
+    const [mid , setMid] = useState<number | null>(Number(localStorage.getItem("id")))
+    const [member, setMember] = useState<MemberInterface | null>(null);
+  
+    const GetMemberId = async (member_id:number) => {
+  
+      let res = await GetMemberById(member_id);
+      
+      if (res.status == 200) {
+  
+        setMember(res.data);
+  
+      } else {
+  
+  
+        messageApi.open({
+  
+          type: "error",
+  
+          content: res.data.error,
+  
+        });
+  
+      }
+  
+    };
+    useEffect(() => {
+      setMid(Number(localStorage.getItem("id")))
+      console.log(mid);
+      GetMemberId(mid); // ดึงข้อมูลผู้ใช้เมื่อหน้าโหลด
+    }, []);
+    //ส่วนที่เพิ่มมาใหม่******* end
+    
+
   const senderID = 2; // ID ของผู้ส่งข้อความ
-  const memberID = 2; // ID ของสมาชิกที่กำลังใช้งาน
+
 
   const onFinish = async () => {
     if (!inputMessage.trim()) {
@@ -81,7 +116,7 @@ const Test: React.FC = () => {
       const rooms = await RoomChatByMemberID(memberID);
       const memberPromises = rooms.map(async (room: any) => {
         if (room.SellerID) {
-          const sellerData = await GetMemberBySeller(room.SellerID);
+          const sellerData = await GetChatMemberBySeller(room.SellerID);
           if (sellerData) {
             return { ...sellerData, SellerID: room.SellerID };
           }
@@ -111,7 +146,7 @@ const Test: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleChatMemberSelect = async (sellerID: string) => {
+  const handleChatMemberSelect = async (sellerID: number) => {
     try {
       const room = await GetRoomChatByMemberAndSellerID(memberID, sellerID);
       if (room && room.RoomID) {
@@ -191,5 +226,6 @@ const Test: React.FC = () => {
     </div>
   );
 };
+
 
 export default Test;
