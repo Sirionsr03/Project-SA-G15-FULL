@@ -1,18 +1,18 @@
 import { ArrowCircleLeft, ArrowCircleRight, Minus, Plus } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CreateOrder, CreateProductsOrder, GetProductById } from '../../../services/http/index';
-import "./Byproduct.css";
-import Logo from "/Users/gam/sa-67-song_thor_sut/frontend/public/4-Photoroom.png";
-import Back from "/Users/gam/sa-67-song_thor_sut/frontend/public/back.png";
-import List from "/Users/gam/sa-67-song_thor_sut/frontend/public/list.png";
-import Notification from "/Users/gam/sa-67-song_thor_sut/frontend/public/notifications-button.png";
-import ShoppingCartIcon from "/Users/gam/sa-67-song_thor_sut/frontend/public/shopping-cart.png";
+import { useNavigate, useParams } from "react-router-dom";
+import { CreateOrder, CreateProductsOrder, GetProductById, GetProductsById } from '../../../services/http/index';
+import "./BuyProducts.css";
+import Logo from "../../../assets/logo.png";
+import Back from "../../../assets/back-arrow.png";
+import List from "../../../assets/list.png";
+import Notification from "../../../assets/notifications-button.png";
+import ShoppingCartIcon from "../../../assets/shopping-cart.png";
 
 interface Products {
   Title: string;
   Price: number;
-  Picture_product: string;
+  PictureProduct: string;
   Description: string;
   SellerID: number;
 }
@@ -23,18 +23,20 @@ const Byproduct: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const [memberId, setMemberId] = useState<number | null>(null);
+  const MemberID = Number(localStorage.getItem("id"));
 
-  const productId = 2;
+  const { id } = useParams<{ id: string }>(); // ใช้ useParams เพื่อรับ productId จาก path
+  const productId = Number(id); // แปลงค่า id เป็นตัวเลข
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const data: Products = await GetProductById(productId);
+      const data: Products = await GetProductsById(productId);
       if (data) {
         setProduct(data);
       }
     };
     fetchProduct();
-    setMemberId(7);
+    setMemberId(MemberID); // สมมติว่า MemberID ถูกตั้งเป็น 7
   }, [productId]);
 
   const increaseQuantity = () => {
@@ -48,7 +50,11 @@ const Byproduct: React.FC = () => {
   };
 
   const goToIndexPage = () => {
-    navigate('/product');
+    navigate('/HomeMember');
+  };
+
+  const goToIndexPageOrder = () => {
+    navigate('/MyOrder');
   };
 
   const handleBuyProduct = () => {
@@ -94,7 +100,7 @@ const Byproduct: React.FC = () => {
   }
 
   return (
-    <div className='navbar'>
+    <div className='Buyproducts'>
       {/* Custom Modal */}
       {isModalVisible && (
         <div className="custom-modal">
@@ -116,39 +122,30 @@ const Byproduct: React.FC = () => {
 
       <div className='right-section'>
         <div className='links'>
-          <div className="search">
+          <div className="Buyproducts-search">
             <input type="text" placeholder="search" />
           </div>
           <button className="button-login">สร้างการขาย</button>
 
-          <button className='button-icon button-icon1' onClick={goToIndexPage}>
+          <button className='button-icon button-icon1'  onClick={goToIndexPageOrder}>
             <img src={ShoppingCartIcon} alt='Shopping Cart' />
           </button>
 
-          <div className='button-icon button-icon2 list-container'>
+          <div className='button-icon button-icon2 '>
             <img src={List} alt='List' />
-            <div className="list-menu">
-              {/* ตัวเลือกในเมนูที่แสดง */}
-              <ul>
-                <li>ตัวเลือก 1</li>
-                <li>ตัวเลือก 2</li>
-                <li>ตัวเลือก 3</li>
-              </ul>
-            </div>
           </div>
 
           <button className='button-icon button-icon3'>
             <img src={Notification} alt='Notification' />
           </button>
 
-          <button className='button-icon button-icon4'>
+          <button className='button-icon button-icon4' onClick={goToIndexPage}>
             <img src={Back} alt='Back' />
           </button>
 
           <div className="frame-1">
-            <img src={product.Picture_product} className="Bag" alt='Product' />
+            <img src={product.PictureProduct} className="Bag" alt='Product' />
           </div>
-
 
           <Plus size={25} className="icon-plus" onClick={increaseQuantity} />
           <Minus size={25} className="icon-minus" onClick={decreaseQuantity} />

@@ -5,7 +5,9 @@ import Loadable from "../component/Loadable";
 import LoginPage from "../pages/authentication/Login/Login";
 import Profile from "../pages/authentication/Member/Profile";
 import MyProducts from "../pages/Products/MyProducts/MyProducts";
-// import ApplyToSeller from "../pages/Products/ApplyToSeller/ApplyToSeller";
+import BuyProducts from "../pages/Products/Buy-Products/BuyProducts";
+import Orders from "../pages/Products/Orders/Orders";
+
 
 
 const MainPages = Loadable(lazy(() => import("../../src/pages/Home/home")));
@@ -17,6 +19,7 @@ const CreateProducts = Loadable(lazy(() => import("../pages/Products/CreateProdu
 const ApplyToSeller = Loadable(lazy(() => import("../pages/Products/ApplyToSeller/ApplyToSeller")));
 const ProfileEdit = Loadable(lazy(() => import("../../src/pages/authentication/Member/edit/ProfileEdit")));
 const ChatBuyer = Loadable(lazy(() => import("../../src/pages/Chat/ChatBuyer")));
+const EditProducts = Loadable(lazy(() => import("../../src/pages/Products/EditProducts/EditProducts")));
 
 
 const MemberRoutes = (isLoggedIn: boolean): RouteObject[] => {
@@ -50,6 +53,20 @@ const MemberRoutes = (isLoggedIn: boolean): RouteObject[] => {
     {
       path: "/MyProducts",
       element: <MyProducts />,
+    },
+
+    {
+      path: "/EditProducts/:id",
+      element: <EditProducts />,
+    },
+
+    {
+      path: "/BuyProduct/:id",
+      element: <BuyProducts />,
+    },
+    {
+      path: "/MyOrder",
+      element: <Orders />,
     },
 
     {

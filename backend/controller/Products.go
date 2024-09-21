@@ -144,17 +144,39 @@ func GetProductsByMemberID(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"products": products})
 }
 
+//Code เดิม
+// func GetProductsBySellerID(c *gin.Context) {
+//     sellerID := c.Param("seller_id")
+//     var products []entity.Products
 
+//     db := config.DB()
+//     result := db.
+//         Joins("JOIN products_orders ON products_orders.product_id = products.id").
+//         Joins("JOIN orders ON orders.id = products_orders.order_id").
+//         Where("orders.seller_id = ?", sellerID).
+//         Preload("Seller").
+//         Find(&products)
+
+//     if result.Error != nil {
+//         c.JSON(http.StatusNotFound, gin.H{"error": result.Error.Error()})
+//         return
+//     }
+
+//     c.JSON(http.StatusOK, gin.H{"products": products})
+// }
+
+
+
+
+//Code ทดลอง
 func GetProductsBySellerID(c *gin.Context) {
     sellerID := c.Param("seller_id")
     var products []entity.Products
 
     db := config.DB()
     result := db.
-        Joins("JOIN products_orders ON products_orders.product_id = products.id").
-        Joins("JOIN orders ON orders.id = products_orders.order_id").
-        Where("orders.seller_id = ?", sellerID).
-        Preload("Seller").
+        Where("seller_id = ?", sellerID). // Filter products by seller_id
+        Preload("Seller").                // Preload the Seller relationship if necessary
         Find(&products)
 
     if result.Error != nil {
@@ -164,4 +186,3 @@ func GetProductsBySellerID(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"products": products})
 }
-

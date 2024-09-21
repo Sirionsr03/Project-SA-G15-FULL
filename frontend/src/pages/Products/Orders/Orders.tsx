@@ -1,21 +1,21 @@
-import "./Index.css";
+import "./Orders.css";
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import { GetProductsByMemberId, GetOrdersByProductIDAndMemberID, DeleteOrder } from "../../../services/http/index";
-import Logo from "/Users/gam/sa-67-song_thor_sut/frontend/public/4-Photoroom.png";
-import ShoppingCartIcon from "/Users/gam/sa-67-song_thor_sut/frontend/public/shopping-cart.png";
-import List from "/Users/gam/sa-67-song_thor_sut/frontend/public/list.png";
-import Notification from "/Users/gam/sa-67-song_thor_sut/frontend/public/notifications-button.png";
-import Back from "/Users/gam/sa-67-song_thor_sut/frontend/public/back.png";
+import Logo from "../../../assets/logo.png";
+import Back from "../../../assets/back-arrow.png";
+import List from "../../../assets/list.png";
+import Notification from "../../../assets/notifications-button.png";
+import ShoppingCartIcon from "../../../assets/shopping-cart.png";
 
-interface Product {
+interface Products {
   ID: number;
   Title: string;
   Price: number;
-  Picture_product: string;
+  PictureProduct: string;
   Description: string;
   SellerID: number;
   OrderID?: number;
@@ -27,10 +27,13 @@ interface Order {
   Total_price: number;
   SellerID: number;
 }
+
+
 const Index: React.FC = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Products[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const MemberID = Number(localStorage.getItem("id"));
   
   // Modal state
   const [open, setOpen] = useState(false);
@@ -41,13 +44,13 @@ const Index: React.FC = () => {
   // Function to fetch products with pagination
   const fetchProducts = async (page: number = 1, pageSize: number = 10) => { // Replace with the actual seller ID
     try {
-      const result = await GetProductsByMemberId(4, page, pageSize);
+      const result = await GetProductsByMemberId(MemberID, page, pageSize);
       if (result && Array.isArray(result.products)) {
-        const updatedProducts: Product[] = []; // Initialize an empty array
+        const updatedProducts: Products[] = []; // Initialize an empty array
         const uniqueProductOrderIds = new Set<number>(); // Set to keep track of unique product-order combinations
   
         for (const product of result.products) {
-          const orders: Order[] = await GetOrdersByProductIDAndMemberID(4, product.ID);
+          const orders: Order[] = await GetOrdersByProductIDAndMemberID(MemberID, product.ID);
           if (orders && orders.length > 0) {
             // แยกรายการสินค้าตาม Order ที่ต่างกัน
             orders.forEach((order: Order) => {
@@ -84,7 +87,7 @@ const Index: React.FC = () => {
     fetchProducts();
   }, []);
 
-  const columns: ColumnsType<Product> = [
+  const columns: ColumnsType<Products> = [
     {
       title: "Title",
       dataIndex: "Title",
@@ -106,7 +109,7 @@ const Index: React.FC = () => {
       dataIndex: "Picture_product",
       key: "picture",
       render: (_, record) => (
-        <img src={record.Picture_product} alt={record.Title} width="170" />
+        <img src={record.PictureProduct} alt={record.Title} width="170" />
       ),
     },
     {
@@ -125,7 +128,7 @@ const Index: React.FC = () => {
     },
   ];
 
-  const showModal = (product: Product) => {
+  const showModal = (product: Products) => {
     setModalText(`คุณต้องการลบข้อมูลคำสั่งซื้อสำหรับสินค้าชื่อ "${product.Title}" หรือไม่?`);
     setDeleteId(product.OrderID);
     setOpen(true);
@@ -182,7 +185,7 @@ const Index: React.FC = () => {
       >
         <p>{modalText}</p>
       </Modal>
-      <div className="search">
+      <div className="Buyproducts-search">
         <input type="text" placeholder="search" />
       </div>
       <button className="button-login">สร้างการขาย</button>

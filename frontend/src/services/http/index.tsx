@@ -416,7 +416,7 @@ async function GetMemberBySeller(seller_id: number | undefined) {
     return res;
   }
   
-  async function UpdateProducts(data: ProductsInterface) {
+  async function UpdateProducts(products: Products[], data: ProductsInterface) {
     const requestOptions = {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -434,6 +434,8 @@ async function GetMemberBySeller(seller_id: number | undefined) {
   
     return res;
   }
+
+
 //***************************************************************************************** */
 
 
@@ -877,6 +879,7 @@ export {
   DeleteProductsByID,
   GetProductsById,
   UpdateProducts,
+
 
   GetProductsByMemberId,
   GetProductsBySellerId,

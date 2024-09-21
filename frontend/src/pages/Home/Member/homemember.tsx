@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PRODUCTS } from "../../../Product";
+
 
 
 import brandner1 from "../../../assets/brandner.png";
@@ -16,53 +16,81 @@ import icons7 from "../../../icon/pants.png";
 import "./homemember.css"
 
 import NavbarMember from '../../../component/navbarMember';
-import { Course } from './product';
 import { MemberInterface } from '../../../interfaces/Member';
-import { GetMemberById } from '../../../services/http';
+import { GetMemberById, GetProducts } from '../../../services/http';
+import { Card } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+const { Meta } = Card;
+
+interface Products {
+  ID: number;
+  Title: string;
+  Price: number;
+  PictureProduct: string;
+  Description: string;
+  SellerID: number;
+  OrderID?: number;
+}
 
 const imageArray = [brandner1, brandner2, brandner3];
 
 const HomeMember = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  //ส่วนที่เพิ่มมาใหม่ ****start
-  const [mid , setMid] = useState<number | null>(Number(localStorage.getItem("id")))
+  const [products, setProducts] = useState<Products[]>([]);
+  const [mid, setMid] = useState<number | null>(Number(localStorage.getItem("id")));
   const [member, setMember] = useState<MemberInterface | null>(null);
 
-  const GetMemberId = async (member_id:number) => {
+  const navigate = useNavigate(); // ใช้ useNavigate แทน useHistory
 
+  const GetMemberId = async (member_id: number) => {
     let res = await GetMemberById(member_id);
-    
     if (res.status == 200) {
-
       setMember(res.data);
-
     } else {
-
-
       messageApi.open({
-
         type: "error",
-
         content: res.data.error,
-
       });
-
     }
-
   };
+
+  const fetchProducts = async () => {
+    try {
+      const result = await GetProducts();
+      if (Array.isArray(result)) {
+        setProducts(result);
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "ข้อมูลที่ได้รับจาก API ไม่ถูกต้อง",
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "เกิดข้อผิดพลาดในการดึงข้อมูลสินค้า",
+      });
+    }
+  };
+
+  const handleProductClick = (id: number) => {
+    // เมื่อคลิกที่สินค้าให้ไปที่เส้นทาง /BuyProduct พร้อมส่ง id ไปด้วย
+    navigate(`/BuyProduct/${id}`);
+  };
+
   useEffect(() => {
-    setMid(Number(localStorage.getItem("id")))
-    console.log(mid);
-    GetMemberId(mid); // ดึงข้อมูลผู้ใช้เมื่อหน้าโหลด
-  }, []);
-  //ส่วนที่เพิ่มมาใหม่******* end
+    setMid(Number(localStorage.getItem("id")));
+    GetMemberId(mid!);
+    fetchProducts();
+  }, [mid]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((Index) =>
         Index === imageArray.length - 1 ? 0 : Index + 1
-      ); }, 5000); 
+      );
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -84,18 +112,33 @@ const HomeMember = () => {
         <div className="Naw-arrivalsmember">
           <p>NEW ARRIVALS</p>
         </div>
-
-        <div className="products">
-          {PRODUCTS.map((product) => (
-            <Course key={product.id} data={product} />
-          ))}
+        <div
+          className="products"
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '20px' // กำหนดระยะห่างระหว่างการ์ดแต่ละใบ
+          }}
+        >
+          {products.length > 0 ? (
+            products.map(product => (
+              <Card
+                key={product.ID}
+                hoverable
+                style={{ width: 240, margin: '10px' }} // หรือจะปรับ margin นี้
+                cover={<img alt={product.Title} src={product.PictureProduct || 'https://via.placeholder.com/240'} />}
+                onClick={() => handleProductClick(product.ID)} // เมื่อคลิกให้เรียกฟังก์ชันนี้
+              >
+                <Meta title={product.Title} description={`ราคา: ${product.Price} บาท`} />
+              </Card>
+            ))
+          ) : (
+            <p>ไม่มีสินค้าที่แสดงผล</p>
+          )}
         </div>
-      </div></>
+      </div>
+    </>
   );
-}
+};
 
 export default HomeMember;
-
-
-
-

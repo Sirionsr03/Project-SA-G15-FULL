@@ -45,8 +45,8 @@ const Index: React.FC = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const MemberID = Number(localStorage.getItem("id"));
   
-
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState<string>();
